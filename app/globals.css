@@ -76,3 +76,32 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes float-delay {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-float-delay {
+  animation: float-delay 7s ease-in-out infinite;
+}
+
+.neon-text {
+  text-shadow: 0 0 2px #5865f2, 0 0 4px #5865f2, 0 0 6px #5865f2;
+}
