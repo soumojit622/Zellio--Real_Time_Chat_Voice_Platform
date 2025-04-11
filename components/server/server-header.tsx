@@ -47,10 +47,11 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         {isModerator && (
           <DropdownMenuItem
             onClick={() => onOpen("invite", { server })}
-            className="px-3 py-2 hover:bg-[#5865F2]/20 text-indigo-400 flex justify-between items-center cursor-pointer"
+            className="px-3 py-2 flex justify-between items-center cursor-pointer 
+                     bg-transparent hover:bg-[#5865F2]/20 !text-indigo-400 transition-colors duration-150"
           >
             Invite People
-            <UserPlus className="h-4 w-4 text-indigo-400" />
+            <UserPlus className="h-4 w-4 !text-indigo-400" />
           </DropdownMenuItem>
         )}
 
@@ -89,9 +90,9 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         {isAdmin && (
           <DropdownMenuItem
             onClick={() => onOpen("deleteServer", { server })}
-            className="px-3 py-2 hover:bg-rose-500/10 text-rose-500 flex justify-between items-center cursor-pointer"
+            className="px-3 py-2 flex items-center justify-between gap-2 cursor-pointer transition-colors duration-200 bg-transparent hover:bg-rose-500/20 text-rose-500 hover:text-rose-500 font-medium rounded-md"
           >
-            Delete Server
+            <span className="text-rose-500">Delete Server</span>
             <Trash className="h-4 w-4 text-rose-500" />
           </DropdownMenuItem>
         )}
@@ -99,10 +100,12 @@ export const ServerHeader = ({ server, role }: ServerHeaderProps) => {
         {!isAdmin && (
           <DropdownMenuItem
             onClick={() => onOpen("leaveServer", { server })}
-            className="px-3 py-2 hover:bg-rose-500/10 text-rose-500 flex justify-between items-center cursor-pointer"
+            className="px-3 py-2 flex items-center gap-2 cursor-pointer bg-transparent hover:bg-rose-500/10 transition"
           >
-            Leave Server
             <LogOut className="h-4 w-4 text-rose-500" />
+            <span className="text-sm font-medium text-rose-500">
+              Leave Server
+            </span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

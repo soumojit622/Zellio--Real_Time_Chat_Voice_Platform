@@ -135,15 +135,16 @@ export const InitialModal = () => {
               />
             </div>
 
-            <DialogFooter className="px-6 py-4">
+            <DialogFooter className="bg-[#1E1F22] border-t border-white/5 px-6 py-4 rounded-b-xl">
               <Button
                 disabled={isLoading}
                 aria-disabled={isLoading}
-                variant="default"
-                className="w-full bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold px-5 py-2.5 rounded-lg transition duration-300 shadow-md flex items-center justify-center gap-2"
+                type="submit"
+                variant="primary"
+                className="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-semibold transition-all px-5 py-2 rounded-md flex items-center justify-center gap-2 shadow-lg"
               >
                 <PlusCircle className="w-5 h-5" />
-                Create
+                Create Server
               </Button>
             </DialogFooter>
           </form>

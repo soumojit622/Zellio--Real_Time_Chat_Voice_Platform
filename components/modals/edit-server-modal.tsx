@@ -3,30 +3,31 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { FileUpload } from "@/components/file-upload";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useModal } from "@/hooks/use-modal-store";
-import { PlusCircle, Server, ServerCog } from "lucide-react";
+import { Save, ServerCog } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -37,11 +38,12 @@ const formSchema = z.object({
   }),
 });
 
-export const CreateServerModal = () => {
-  const { isOpen, onClose, type } = useModal();
+export const EditServerModal = () => {
+  const { isOpen, onClose, type, data } = useModal();
   const router = useRouter();
 
-  const isModalOpen = isOpen && type === "createServer";
+  const isModalOpen = isOpen && type === "editServer";
+  const { server } = data;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -51,11 +53,18 @@ export const CreateServerModal = () => {
     },
   });
 
+  useEffect(() => {
+    if (server) {
+      form.setValue("name", server.name);
+      form.setValue("imageUrl", server.imageUrl);
+    }
+  }, [server, form]);
+
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/servers", values);
+      await axios.patch(`/api/servers/${server?.id}`, values);
 
       form.reset();
       router.refresh();
@@ -72,14 +81,13 @@ export const CreateServerModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 overflow-hidden bg-[#2b2d31] border border-white/10 shadow-xl rounded-lg backdrop-blur-md">
+      <DialogContent className="p-0 overflow-hidden rounded-xl bg-[#2B2D31] text-white shadow-2xl border border-zinc-700">
         <DialogHeader className="pt-8 px-6">
-          <DialogTitle className="text-2xl text-center font-extrabold text-white drop-shadow-md flex items-center justify-center gap-2">
-            <Server className="w-6 h-6 text-[#5865F2]" />
-            Create your server
+          <DialogTitle className="text-3xl text-center font-bold tracking-wide text-white">
+            Customize your server
           </DialogTitle>
 
-          <DialogDescription className="text-center text-zinc-400">
+          <DialogDescription className="text-center text-zinc-400 mt-1 text-sm">
             Give your server a personality with a name and an image. You can
             always change it later.
           </DialogDescription>
@@ -93,7 +101,8 @@ export const CreateServerModal = () => {
             autoComplete="off"
           >
             <div className="space-y-8 px-6">
-              <div className="flex flex-col items-center justify-center gap-2 text-center">
+              {/* Image Upload */}
+              <div className="flex flex-col items-center justify-center gap-2">
                 <FormField
                   control={form.control}
                   name="imageUrl"
@@ -112,40 +121,43 @@ export const CreateServerModal = () => {
                 />
               </div>
 
+              {/* Server Name */}
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 tracking-wide flex items-center gap-1">
+                    <FormLabel className="flex items-center gap-1 uppercase text-xs font-semibold text-zinc-400 tracking-wider">
                       <ServerCog className="w-4 h-4" />
                       Server name
                     </FormLabel>
+
                     <FormControl>
                       <Input
                         disabled={isLoading}
                         aria-disabled={isLoading}
-                        className="dark:bg-zinc-700/40 bg-zinc-100/10 border border-zinc-600 placeholder:text-zinc-400 text-white focus:ring-2 focus:ring-[#5865F2] focus:outline-none"
                         placeholder="Enter server name"
+                        className="bg-[#1E1F22] border border-zinc-700 text-white placeholder:text-zinc-500 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                         {...field}
                       />
                     </FormControl>
+
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            <DialogFooter className="bg-[#1E1F22] border-t border-white/5 px-6 py-4 rounded-b-xl">
+            {/* Footer */}
+            <DialogFooter className="px-6 py-4">
               <Button
                 disabled={isLoading}
                 aria-disabled={isLoading}
-                type="submit"
-                variant="primary"
-                className="w-full bg-[#5865F2] hover:bg-[#4752c4] text-white font-semibold transition-all px-5 py-2 rounded-md flex items-center justify-center gap-2 shadow-lg"
+                variant="default"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-md font-semibold transition-colors w-full flex items-center justify-center gap-2"
               >
-                <PlusCircle className="w-5 h-5" />
-                Create Server
+                <Save className="w-4 h-4" />
+                Save
               </Button>
             </DialogFooter>
           </form>
