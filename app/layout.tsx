@@ -9,6 +9,7 @@ import { Open_Sans } from "next/font/google";
 import { extractRouterConfig } from "uploadthing/server";
 import { appFileRouter } from "./api/uploadthing/core";
 import "./globals.css";
+import { ModalProvider } from "@/components/providers/modal-provider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -59,6 +60,7 @@ export default function RootLayout({
             storageKey="zellio"
           >
             <NextSSRPlugin routerConfig={extractRouterConfig(appFileRouter)} />
+            <ModalProvider/>
             {children}
           </ThemeProvider>
         </body>
